@@ -42,7 +42,6 @@ class DFA(object):
     # 初始化
     def __init__(self):
         self.start_state = 0
-        pass
 
     # 状态转移
     def move(self, state, char: str):
@@ -62,5 +61,5 @@ class DFA(object):
             return self.final_states.get(state)
         return TokenType.ERRTOKEN
 
-    def start_state(self):
+    def get_start_state(self):
         return self.start_state

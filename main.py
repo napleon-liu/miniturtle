@@ -1,16 +1,14 @@
-# This is a sample Python script.
-
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+from scanner.scanner import Scanner
 
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+def main():
+    scanner = Scanner("testcase.txt")
+    print("{:<20}{:<15}{:<20}{:<10}".format("Token Type", "Token Lexeme", "Token Value", "Token Func Ptr"))
+    while scanner.read_token():
+        token = scanner.get_token()
+        print(token)
 
 
-# Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    print_hi('PyCharm')
+    main()
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
