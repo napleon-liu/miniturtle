@@ -1,14 +1,11 @@
-from scanner.scanner import Scanner
+# from scanner.scanner import Scanner
+from parser.parser import Parser
 
 
 def main():
-    scanner = Scanner("testcase.txt")
-    print("{:<20}{:<15}{:<20}{:<10}".format("Token Type", "Token Lexeme", "Token Value", "Token Func Ptr"))
-    while scanner.read_token():
-        token = scanner.get_token()
-        print(token)
+    parser = Parser("testcase.txt")
+    parser.program()
 
 
 if __name__ == '__main__':
     main()
-
