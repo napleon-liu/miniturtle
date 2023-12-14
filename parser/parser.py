@@ -1,11 +1,13 @@
 from error import Error
-from parser.expression import ExprNode, CaseOperator, print_expr_node
+from parser.expression import *
 from scanner.scanner import Scanner
 from scanner.token import *
 
 
 class Parser:
+
     def __init__(self, file_path: str):
+        self.parameter = 0.0
         self.statements = []
         self.scanner = Scanner(file_path)
         self.token = Token(TokenType.NONETOKEN, "", 0.0, 0)
@@ -121,6 +123,7 @@ class Parser:
         left = MakeExprNode(token_temp, left, right);
     }
     return left;
+    
     '''
 
     def expression(self):
@@ -130,9 +133,9 @@ class Parser:
             token_temp = self.token.type
             self.match_token(token_temp)
             right = self.term()
-            left = ExprNode(token_temp, CaseOperator(left, right))
-        print("      exit from expression")
-        print_expr_node(left)
+            left = ExprNode(token_temp, left, right)
+        print("      left from expression")
+        print_expr_tree(left)
         return left
 
     '''
@@ -155,7 +158,7 @@ class Parser:
             token_temp = self.token.type
             self.match_token(token_temp)
             right = self.factor()
-            left = ExprNode(token_temp, CaseOperator(left, right))
+            left = ExprNode(token_temp, left, right)
         return left
 
     '''
@@ -182,7 +185,7 @@ class Parser:
             token_temp = self.token.type
             self.match_token(token_temp)
             node = self.factor()
-            node = ExprNode(token_temp, CaseOperator(node, None))
+            node = ExprNode(token_temp, node, ExprNode(TokenType.CONST_ID, 0.0))
         else:
             node = self.component()
         return node
@@ -205,7 +208,7 @@ class Parser:
         if self.token.type == TokenType.POWER:
             self.match_token(TokenType.POWER)
             right = self.component()
-            node = ExprNode(TokenType.POWER, CaseOperator(node, right))
+            node = ExprNode(TokenType.POWER, node, right)
         return node
 
     '''
@@ -239,19 +242,21 @@ class Parser:
     '''
 
     def atom(self):
-        node = None
+        node: ExprNode
         if self.token.type == TokenType.CONST_ID:
+            token = self.token
             self.match_token(TokenType.CONST_ID)
-            node = ExprNode(TokenType.CONST_ID, CaseOperator(None, None))
+            node = ExprNode(TokenType.CONST_ID, token.value)
         elif self.token.type == TokenType.T:
             self.match_token(TokenType.T)
-            node = ExprNode(TokenType.T, CaseOperator(None, None))
+            node = ExprNode(TokenType.T, id(self.parameter))
         elif self.token.type == TokenType.FUNC:
+            func = self.token.func_ptr
             self.match_token(TokenType.FUNC)
             self.match_token(TokenType.L_BRACKET)
             child = self.expression()
             self.match_token(TokenType.R_BRACKET)
-            node = ExprNode(TokenType.FUNC, CaseOperator(child, None))
+            node = ExprNode(TokenType.FUNC, func, child)
         elif self.token.type == TokenType.L_BRACKET:
             self.match_token(TokenType.L_BRACKET)
             node = self.expression()
