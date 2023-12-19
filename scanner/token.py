@@ -33,7 +33,7 @@ class TokenType(Enum):
 
 
 class Token(object):
-    def __init__(self, token_type: TokenType, token_lexeme: string, token_value: float, token_func_ptr: int):
+    def __init__(self, token_type: TokenType, token_lexeme: string, token_value: float, token_func_ptr):
         self.type = token_type
         self.lexeme = token_lexeme
         self.value = token_value

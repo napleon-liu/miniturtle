@@ -4,10 +4,25 @@ from scanner.scanner import Scanner
 from scanner.token import *
 
 
+class DrawStatement:
+    def __init__(self):
+        self.low_bound = None
+        self.high_bound = None
+        self.x_value = None
+        self.y_value = None
+        self.step = None
+
+
 class Parser:
+    parameter = 0.0
 
     def __init__(self, file_path: str):
-        self.parameter = 0.0
+        self.origin_x = 0
+        self.origin_y = 0
+        self.scale_x = 1
+        self.scale_y = 1
+        self.t = 0
+        self.rot_degree = 0
         self.statements = []
         self.scanner = Scanner(file_path)
         self.token = Token(TokenType.NONETOKEN, "", 0.0, 0)
@@ -58,9 +73,9 @@ class Parser:
         self.match_token(TokenType.ORIGIN)
         self.match_token(TokenType.IS)
         self.match_token(TokenType.L_BRACKET)
-        self.expression()
+        self.origin_x = self.expression()
         self.match_token(TokenType.COMMA)
-        self.expression()
+        self.origin_y = self.expression()
         self.match_token(TokenType.R_BRACKET)
         print("    exit from origin_statement")
 
@@ -75,9 +90,9 @@ class Parser:
         self.match_token(TokenType.SCALE)
         self.match_token(TokenType.IS)
         self.match_token(TokenType.L_BRACKET)
-        self.expression()
+        self.scale_x = self.expression()
         self.match_token(TokenType.COMMA)
-        self.expression()
+        self.scale_y = self.expression()
         self.match_token(TokenType.R_BRACKET)
         print("    exit from scale_statement")
 
@@ -90,25 +105,27 @@ class Parser:
         print("    enter in rot_statement")
         self.match_token(TokenType.ROT)
         self.match_token(TokenType.IS)
-        self.expression()
+        self.rot_degree = self.expression()
         print("    exit from rot_statement")
 
     def for_statement(self):
         print("    enter in for_statement")
+        statement = DrawStatement()
         self.match_token(TokenType.FOR)
         self.match_token(TokenType.T)
         self.match_token(TokenType.FROM)
-        self.expression()
+        statement.low_bound = self.expression()
         self.match_token(TokenType.TO)
-        self.expression()
+        statement.high_bound = self.expression()
         self.match_token(TokenType.STEP)
-        self.expression()
+        statement.step = self.expression()
         self.match_token(TokenType.DRAW)
         self.match_token(TokenType.L_BRACKET)
-        self.expression()
+        statement.x_value = self.expression()
         self.match_token(TokenType.COMMA)
-        self.expression()
+        statement.y_value = self.expression()
         self.match_token(TokenType.R_BRACKET)
+        self.statements.append(statement)
         print("    exit from for_statement")
 
     '''
@@ -185,7 +202,7 @@ class Parser:
             token_temp = self.token.type
             self.match_token(token_temp)
             node = self.factor()
-            node = ExprNode(token_temp, node, ExprNode(TokenType.CONST_ID, 0.0))
+            node = ExprNode(token_temp, ExprNode(TokenType.CONST_ID, 0.0), node)
         else:
             node = self.component()
         return node
@@ -249,7 +266,7 @@ class Parser:
             node = ExprNode(TokenType.CONST_ID, token.value)
         elif self.token.type == TokenType.T:
             self.match_token(TokenType.T)
-            node = ExprNode(TokenType.T, id(self.parameter))
+            node = ExprNode(TokenType.T, self.parameter)
         elif self.token.type == TokenType.FUNC:
             func = self.token.func_ptr
             self.match_token(TokenType.FUNC)
