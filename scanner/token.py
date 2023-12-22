@@ -1,8 +1,8 @@
-import enum
+from enum import Enum
 import string
 
 
-class TokenType(enum.Enum):
+class TokenType(Enum):
     ID = 1,  # 标识符
     COMMENT = 2,  # 注释
     ORIGIN = 3,  # 原点
@@ -31,15 +31,13 @@ class TokenType(enum.Enum):
     COLOR = 26,  # 画笔颜色
     ERRTOKEN = 27,  # 出错记号
 
-    def __init__(self):
-        pass
-
 
 class Token(object):
-    def __init__(self, token_type: TokenType, token_lexeme: string, token_value: float, token_func_ptr: int):
+    def __init__(self, token_type: TokenType, token_lexeme: string, token_value: float, token_func_ptr):
         self.type = token_type
         self.lexeme = token_lexeme
         self.value = token_value
         self.func_ptr = token_func_ptr
 
-
+    def __str__(self):
+        return "{:<20}{:<15}{:<20}{:<10}".format(self.type.name, self.lexeme, self.value, self.func_ptr)

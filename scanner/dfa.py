@@ -7,14 +7,14 @@ class DFA(object):
         2: TokenType.CONST_ID,
         3: TokenType.CONST_ID,
         4: TokenType.MUL,
-        5: TokenType.DIV,
-        6: TokenType.POWER,
-        7: TokenType.PLUS,
-        8: TokenType.MINUS,
-        9: TokenType.SEMICOLON,
-        10: TokenType.L_BRACKET,
-        11: TokenType.R_BRACKET,
-        12: TokenType.COMMA,
+        5: TokenType.POWER,
+        6: TokenType.DIV,
+        7: TokenType.MINUS,
+        8: TokenType.PLUS,
+        9: TokenType.COMMA,
+        10: TokenType.SEMICOLON,
+        11: TokenType.L_BRACKET,
+        12: TokenType.R_BRACKET,
         13: TokenType.COMMENT
     }
 
@@ -42,7 +42,6 @@ class DFA(object):
     # 初始化
     def __init__(self):
         self.start_state = 0
-        pass
 
     # 状态转移
     def move(self, state, char: str):
@@ -62,5 +61,5 @@ class DFA(object):
             return self.final_states.get(state)
         return TokenType.ERRTOKEN
 
-    def start_state(self):
+    def get_start_state(self):
         return self.start_state

@@ -1,16 +1,14 @@
-# This is a sample Python script.
-
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
-
-
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+# from scanner.scanner import Scanner
+from parser.parser import Parser
+from semantics import Semantics
 
 
-# Press the green button in the gutter to run the script.
+def main():
+    parser = Parser("testcase.txt")
+    semantics = Semantics(parser)
+    semantics.parse()
+    semantics.run()
+
+
 if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    main()
