@@ -1,9 +1,15 @@
 import sys
 from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QPushButton, QTextEdit
+from parser.parser import Parser
+from semantics import Semantics
+
 
 class MyWindow(QMainWindow):
     def __init__(self):
         super().__init__()
+
+        self.semantics = None
+        self.parser = None
         self.setWindowTitle("Miniturtle")
         self.setGeometry(100, 100, 300, 200)
 
@@ -19,11 +25,16 @@ class MyWindow(QMainWindow):
 
     def button_clicked(self):
         plot_command = self.textEdit.toPlainText()
-        # 解析并执行绘图命令
-        # 注意：这里需要你自己实现解析和执行绘图命令的逻辑
-        # 例如，如果你使用的是 matplotlib，你可能需要做类似以下的操作：
-        # exec(f"import matplotlib.pyplot as plt; {plot_command}; plt.show()")
-        self.label.setText("Button Clicked!")
+        file = open("test.txt", "w")
+        file.write(plot_command)
+        file.close()
+
+        self.parser = Parser("test.txt")
+        self.semantics = Semantics(self.parser)
+        self.semantics.parse()
+        self.semantics.run()
+
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

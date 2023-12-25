@@ -1,4 +1,4 @@
-origin is (350, 200);
-rot is pi/6;
-scale is (2, 1);
-for t from -100 to 100 step 1 draw (sin(t), cos(t));
+origin is (0,0);
+rot is 0;
+scale is (1, 1);
+for t from -100 to 100 step 1 draw (t, log(t));

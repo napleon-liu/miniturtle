@@ -7,6 +7,9 @@ from parser.expression import *
 class Semantics:
     def __init__(self, parser: Parser):
         self.parser = parser
+        self.color_r = 0.0
+        self.color_g = 0.447
+        self.color_b = 0.741
         self.origin_x = 0
         self.origin_y = 0
         self.scale_x = 1
@@ -20,6 +23,9 @@ class Semantics:
 
         self.origin_x = calculate_expr_tree(self.parser.origin_x)
         self.origin_y = calculate_expr_tree(self.parser.origin_y)
+        self.color_r = calculate_expr_tree(self.parser.color_r)
+        self.color_g = calculate_expr_tree(self.parser.color_g)
+        self.color_b = calculate_expr_tree(self.parser.color_b)
         self.scale_x = calculate_expr_tree(self.parser.scale_x)
         self.scale_y = calculate_expr_tree(self.parser.scale_y)
         self.rot_degree = calculate_expr_tree(self.parser.rot_degree)
@@ -48,4 +54,4 @@ class Semantics:
             _x.append(x1)
             _y.append(y1)
             self.t = self.t + step
-        plt.plot(_x, _y)
+        plt.plot(_x, _y, color=(self.color_r, self.color_g, self.color_b))

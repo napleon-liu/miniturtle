@@ -1,5 +1,6 @@
 from error import Error
 from parser.expression import *
+from parser.expression import ExprNode
 from scanner.scanner import Scanner
 from scanner.token import *
 
@@ -17,6 +18,9 @@ class Parser:
     parameter = 0.0
 
     def __init__(self, file_path: str):
+        self.color_r = ExprNode(TokenType.CONST_ID, 0.0)
+        self.color_g = ExprNode(TokenType.CONST_ID, 0.447)
+        self.color_b = ExprNode(TokenType.CONST_ID, 0.741)
         self.origin_x = 0
         self.origin_y = 0
         self.scale_x = 1
@@ -50,6 +54,8 @@ class Parser:
             self.scale_statement()
         elif self.token.type == TokenType.ROT:
             self.rot_statement()
+        elif self.token.type == TokenType.COLOR:
+            self.color_statement()
         elif self.token.type == TokenType.FOR:
             self.for_statement()
         else:
@@ -78,6 +84,25 @@ class Parser:
         self.origin_y = self.expression()
         self.match_token(TokenType.R_BRACKET)
         print("    exit from origin_statement")
+
+    """
+    // ColorStatement -> COLOR IS
+    // L_BRACKET Expression COMMA Expression COMMA Expression R_BRACKET
+    // color is (0, 0.447, 0.741)
+    """
+
+    def color_statement(self):
+        print("    enter in color_statement")
+        self.match_token(TokenType.COLOR)
+        self.match_token(TokenType.IS)
+        self.match_token(TokenType.L_BRACKET)
+        self.color_r = self.expression()
+        self.match_token(TokenType.COMMA)
+        self.color_g = self.expression()
+        self.match_token(TokenType.COMMA)
+        self.color_b = self.expression()
+        self.match_token(TokenType.R_BRACKET)
+        print("    exit from color_statement")
 
     '''
     // ScaleStatement  → SCALE IS
